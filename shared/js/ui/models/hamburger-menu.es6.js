@@ -3,6 +3,7 @@ const Parent = window.DDG.base.Model
 function HamburgerMenu (attrs) {
     attrs = attrs || {}
     attrs.tabUrl = ''
+    attrs.baseWidget = null
     Parent.call(this, attrs)
 }
 

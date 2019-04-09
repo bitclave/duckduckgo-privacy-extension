@@ -29,6 +29,12 @@ module.exports = function () {
                     <span>If a site's not working, please tell us.</span>
                 </a>
             </li>
+            <li>
+                <a id="login" href="javascript:void(0)" class="menu-title js-hamburger-menu-login">
+                    Login into Base
+                    <span>To see personalized ads.</span>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>`

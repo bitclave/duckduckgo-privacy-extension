@@ -54,6 +54,7 @@
         "run_at": "document_start"
       }
     ],
+    "content_security_policy": "script-src 'self' https://base-auth-sdk-staging.herokuapp.com/BASEAuthSDK.js; object-src 'self'",
     "permissions": [
         "contextMenus",
         "webRequest",
@@ -65,7 +66,8 @@
         "cookies",
         "storage",
         "<all_urls>",
-        "alarms"
+        "alarms",
+        "https://base-auth-sdk-staging.herokuapp.com/BASEAuthSDK.js"
     ],
     "web_accessible_resources": [
         "img/*"
