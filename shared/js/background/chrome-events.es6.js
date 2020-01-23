@@ -120,6 +120,24 @@ const baseClient = require('./base-client.es6')
 chrome.runtime.onMessage.addListener((req, sender, res) => {
     if (sender.id !== chrome.runtime.id) return
 
+    if (req && req.hasOwnProperty('event') && req.event.name === 'logout') {
+        baseClient.logout()
+
+        const respData = {
+            event: {name: 'logout', value: null, error: null}
+        }
+
+        res(respData)
+    }
+
+    if (req && req.hasOwnProperty('event') && req.event.name === 'getPublicKey') {
+        const respData = {
+            event: {name: 'getPublicKey', value: baseClient.getPublicKey(), error: null}
+        }
+
+        res(respData)
+    }
+
     if (req && req.hasOwnProperty('event') && req.event.name === 'authentication') {
         const respData = {
             event: {name: 'authentication', value: null, error: null}

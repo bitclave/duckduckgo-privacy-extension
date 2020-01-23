@@ -105,6 +105,24 @@ let getActiveTab = () => {
 }
 
 let handleUIMessage = (req, res) => {
+    if (req && req.hasOwnProperty('event') && req.event.name === 'logout') {
+        baseClient.logout()
+
+        const respData = {
+            event: {name: 'logout', value: null, error: null}
+        }
+
+        res(respData)
+    }
+
+    if (req && req.hasOwnProperty('event') && req.event.name === 'getPublicKey') {
+        const respData = {
+            event: {name: 'getPublicKey', value: baseClient.getPublicKey(), error: null}
+        }
+
+        res(respData)
+    }
+
     if (req && req.hasOwnProperty('event') && req.event.name === 'authentication') {
         const respData = {
             event: {name: 'authentication', value: null, error: null}

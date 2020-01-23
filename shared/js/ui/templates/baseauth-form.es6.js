@@ -20,6 +20,7 @@ module.exports = function () {
 function successAuthenticated() {
     return bel`<div><p>Success authenticated in Bitclave Base service.</p>
                     <p>Your public key is: ${this.model.publicKey}</p>
+                    <div class="btn js-baseauth-logout">Logout</div>
                 </div>`
 }
 

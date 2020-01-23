@@ -8,6 +8,14 @@ class BaseClient {
         return this.base.accountManager.authenticationByPassPhrase(mnemonic, 'some secret message')
             .then(account => Promise.resolve(account));
     }
+
+    getPublicKey() {
+        return this.base ? this.base.accountManager.getAccount().publicKey : null;
+    }
+
+    logout() {
+        this.base = null;
+    }
 }
 
 const baseClient = new BaseClient();

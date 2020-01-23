@@ -8,6 +8,7 @@ function BaseAuthForm(ops) {
     Parent.call(this, ops)
 
     this._setup()
+    this.model.checkAuthorization();
 }
 
 BaseAuthForm.prototype = window.$.extend({},
@@ -16,22 +17,25 @@ BaseAuthForm.prototype = window.$.extend({},
         _setup: function () {
             this._cacheElems('.js-baseauth', [
                 'mnemonic',
-                'authenticate'
+                'authenticate',
+                'logout',
             ])
 
             this.bindEvents([
                 [this.store.subscribe, `change:baseauthForm`, this._onModelChange],
                 [this.$mnemonic, `input`, this._onMnemonicChange],
-                [this.$authenticate, `click`, this._onAuthenticateClick]
+                [this.$authenticate, `click`, this._onAuthenticateClick],
+                [this.$logout, `click`, this._onLogoutClick]
             ])
         },
 
         _onModelChange: function (e) {
-            console.log(e);
             const attr = e.change.attribute;
             const val = e.change.value;
 
-            if (attr === 'errored' && val !== null || attr === 'publicKey' && val && val.length > 0) {
+            if (attr === 'errored' && val !== null ||
+                attr === 'publicKey'
+            ) {
                 this.unbindEvents()
                 this._rerender()
                 this._setup()
@@ -40,6 +44,12 @@ BaseAuthForm.prototype = window.$.extend({},
 
         _onMnemonicChange: function () {
             this.model.set('mnemonic', this.$mnemonic.val())
+        },
+
+        _onLogoutClick: function (e) {
+            e.preventDefault()
+
+            this.model.logout();
         },
 
         _onAuthenticateClick: function (e) {
