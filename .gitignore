@@ -12,3 +12,5 @@ build/firefox
 build/chrome
 build/safari
 test/background.js
+.idea/
+*.iml
