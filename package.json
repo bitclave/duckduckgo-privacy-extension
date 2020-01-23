@@ -28,9 +28,9 @@
     "beta-firefox": "make beta-firefox browser=firefox type=release",
     "release-chrome": "make browser=chrome type=release && make chrome-release-zip",
 
-    "dev-firefox-win": "make makefile-win dev browser=firefox type=dev watch=1",
-    "dev-chrome-win": "make makefile-win dev browser=chrome type=dev watch=1",
-    "dev-safari-win": "make makefile-win dev browser=duckduckgo.safariextension type=dev watch=1"
+    "dev-firefox-win": "make -f makefile-win dev browser=firefox type=dev watch=1",
+    "dev-chrome-win": "make -f makefile-win dev browser=chrome type=dev watch=1",
+    "dev-safari-win": "make -f makefile-win dev browser=duckduckgo.safariextension type=dev watch=1"
   },
   "devDependencies": {
     "babel-preset-env": "1.4.0",
