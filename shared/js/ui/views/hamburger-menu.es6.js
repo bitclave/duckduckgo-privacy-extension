@@ -70,54 +70,7 @@ HamburgerMenu.prototype = window.$.extend({},
 
         _handleLogin: function (e) {
             e.preventDefault()
-            const widgetOptionsDesktop = {
-                isMnemonicScreen: false,
-                verificationMessage: 'unguessable random message',
-                buttonStyle: {
-                    // 'display': 'block',
-                    'float': 'right',
-                    'width': 'auto',
-                    // 'background': 'rgba(255, 255, 255, 0.2)',
-                    // 'border-radius': '10px',
-                    // 'position': 'absolute',
-                    // 'right': 0,
-                    // 'bottom': '8px',
-                    'padding': '0',
-                    // 'border': '2px solid #27AE60',
-                    // 'border-radius': '6px',
-                    'color': '#000',
-                    'font-family': '"Roboto", sans-serif',
-                    'font-weight': 500,
-                    'font-size': '26px',
-                    'line-height': '28px',
-                    'text-transform': 'upperCase',
-                    // 'text-decoration': 'none',
-                    'margin': '9px 20px 0',
-                    // 'overflow': 'hidden',
-                    '-webkit-appearance': 'none',
-                    '-moz-appearance': 'none',
-                    'appearance': 'none',
-                    // 'cursor': 'pointer',
-                    // 'text-align': 'center',
-                    'outline': 'none',
-                    'background': 'transparent',
-                    'user-select': 'none'
-                }
-            }
-            const onInit = function (method) {
-                console.log('onInit started')
-                if (method === 'SDK.onInit') {
-                    console.log('onInit SDK.onInit')
-                }
-            }
-            
-            this.model.baseWidget = new BASEAuthSDK.Widget(widgetOptionsDesktop)
-            this.model.baseWidget.insertLoginButton('#login')
-            this.model.baseWidget.listenForInit(onInit)
-            this.model.baseWidget.openSignInProgrammatically()
-            this.model.baseWidget.listenForLogin(account => {
-                console.log("User has logged in! Public key: " + account.publicKey)
-            })
+            browserUIWrapper.openExtensionPage(`/html/baseauth.html`)
         }
     }
 )
