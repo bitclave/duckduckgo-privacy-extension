@@ -1,0 +1,54 @@
+ITEMS   := shared\html shared\data shared\img
+
+release: npm setup-build-dir grunt tosdr moveout fonts
+
+dev: setup-build-dir grunt-process-lists moveout fonts grunt-dev
+
+npm:
+	npm install
+
+grunt:
+	grunt build --browser=$(browser) --type=$(type)
+
+grunt-process-lists:
+	grunt execute:preProcessLists --browser=$(browser) --type=$(type)
+
+grunt-dev:
+	xcopy shared\img build\$(browser)\dev\test\html\ /s /e /h /y
+	xcopy shared\data build\$(browser)\dev\test\html\ /s /e /h /y
+	grunt dev --browser=$(browser) --type=$(type) --watch=$(watch)
+
+tosdr:
+	grunt execute:tosdr --browser=$(browser) --type=$(type)
+
+setup-build-dir:
+	if not exist build\$(browser) mkdir build\$(browser)
+	if not exist build\$(browser)\$(type) mkdir build\$(browser)\$(type)
+	if not exist build\$(browser)\$(type)\data mkdir build\$(browser)\$(type)\data
+	if not exist build\$(browser)\$(type)\img mkdir build\$(browser)\$(type)\img
+	if not exist build\$(browser)\$(type)\html mkdir build\$(browser)\$(type)\html
+	if not exist build\$(browser)\$(type)\public\js mkdir build\$(browser)\$(type)\public\js
+
+chrome-release-zip:
+	rm -f build\chrome\release\chrome-release-*.zip
+	cd build\chrome\release\ && zip -rq chrome-release-$(shell date +"%Y%m%d_%H%M%S").zip *
+
+fonts:
+	if not exist build\$(browser)\$(type)\public mkdir build\$(browser)\$(type)\public
+	copy shared\font build\$(browser)\$(type)\public\
+
+moveout: $(ITEMS)
+	@echo '** Making build directory: $(type) **'
+	copy shared\html build\$(browser)\$(type)\html\ /Y
+	copy shared\data build\$(browser)\$(type)\data\ /Y
+	copy shared\img build\$(browser)\$(type)\img\ /Y
+	xcopy shared\js build\$(browser)\$(type)\public\js\ /s /e /h /y /d
+	xcopy browsers\$(browser) build\$(browser)\$(type)\ /s /e /h /y
+
+beta-firefox: release beta-firefox-zip
+
+remove-firefox-id:
+	sed '\jid1-ZAdIEUB7XOzOJw@jetpack\d' .\browsers\firefox\manifest.json > build\firefox\release\manifest.json
+
+beta-firefox-zip: remove-firefox-id
+	cd build\firefox\release\ && web-ext build
