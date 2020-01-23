@@ -23,17 +23,6 @@
                 "public/js/background.js"
             ]
     },
-    "chrome_settings_overrides": {
-      "search_provider": {
-        "encoding": "UTF-8",
-        "favicon_url": "https://duckduckgo.com/favicon.ico",
-        "is_default": true,
-        "keyword": "duckduckgo.com",
-        "name": "DuckDuckGo",
-        "search_url": "https://duckduckgo.com/?q={searchTerms}",
-        "suggest_url": "https://duckduckgo.com/ac/?q={searchTerms}&type=list"
-      }
-    },
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
@@ -43,6 +32,7 @@
       },
       {
         "js": [
+		  "public/js/content-scripts/test.js",
           "public/js/content-scripts/element-hiding.js"
         ],
         "matches": [
