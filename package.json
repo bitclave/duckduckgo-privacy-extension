@@ -40,7 +40,7 @@
     "duckduckgo-colors": "0.0.1",
     "eslint": "4.19.1",
     "eslint-config-standard": "11.0.0",
-    "grunt": "0.4.5",
+    "grunt": "^0.4.5",
     "grunt-browserify": "5.3.0",
     "grunt-contrib-compass": "0.9.0",
     "grunt-contrib-concat": "0.4.0",
@@ -65,6 +65,7 @@
     "timekeeper": "^2.1.1"
   },
   "dependencies": {
+    "@bitclave/base-client-js": "^0.4.87",
     "@duckduckgo/privacy-grade": "1.0.0",
     "abp-filter-parser": "git://github.com/duckduckgo/abp-filter-parser.git#0.2.0",
     "bel": "4.6.0",
