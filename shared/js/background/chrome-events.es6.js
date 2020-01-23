@@ -113,11 +113,30 @@ chrome.omnibox.onInputEntered.addListener(function (text) {
 
 const settings = require('./settings.es6')
 const browserWrapper = require('./chrome-wrapper.es6')
+const baseClient = require('./base-client.es6')
 
 // handle any messages that come from content/UI scripts
 // returning `true` makes it possible to send back an async response
 chrome.runtime.onMessage.addListener((req, sender, res) => {
     if (sender.id !== chrome.runtime.id) return
+
+    if (req && req.hasOwnProperty('event') && req.event.name === 'authentication') {
+        const respData = {
+            event: {name: 'authentication', value: null, error: null}
+        }
+
+        baseClient.authenticationByPassPhrase(req.event.value)
+            .then(account => {
+                respData.event.value = account;
+                res(respData)
+            })
+            .catch(e => {
+                respData.event.error = e;
+                res(respData)
+            });
+
+        return true
+    }
 
     if (req.getCurrentTab) {
         utils.getCurrentTab().then((tab) => {

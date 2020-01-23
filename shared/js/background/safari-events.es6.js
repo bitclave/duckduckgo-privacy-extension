@@ -5,6 +5,7 @@ const Companies = require('./companies.es6')
 const settings = require('./settings.es6')
 const abpLists = require('./abp-lists.es6')
 const browserWrapper = require('./safari-wrapper.es6')
+const baseClient = require('./base-client.es6')
 
 let _getSafariTabIndex = (target) => {
     for (let i = 0; i < safari.application.activeBrowserWindow.tabs.length; i++) {
@@ -104,6 +105,22 @@ let getActiveTab = () => {
 }
 
 let handleUIMessage = (req, res) => {
+    if (req && req.hasOwnProperty('event') && req.event.name === 'authentication') {
+        const respData = {
+            event: {name: 'authentication', value: null, error: null}
+        }
+
+        baseClient.authenticationByPassPhrase(req.event.value)
+            .then(account => {
+                respData.event.value = account;
+                res(respData)
+            })
+            .catch(e => {
+                respData.event.error = e;
+                res(respData)
+            });
+    }
+
     if (req.getCurrentTab || req.getTab) {
         res(getActiveTab())
     } else if (req.getTopBlocked) {
