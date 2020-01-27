@@ -39,9 +39,9 @@ BaseAuthForm.prototype = window.$.extend({},
                 .then((result) => {
                     if (result && result.hasOwnProperty('event') &&
                         result.event.name === 'logout' && result.event.error === null) {
-                        this.set('authenticated', false);
                         this.set('token', null);
                         this.set('publicKey', null);
+                        this.set('authenticated', false);
 
                     } else {
                         this.set('errored', true);
@@ -65,8 +65,6 @@ BaseAuthForm.prototype = window.$.extend({},
 
             this.fetch({event: {name: 'authentication', value: token}})
                 .then((result) => {
-                    this.set('waitAuth', false);
-
                     if (result && result.hasOwnProperty('event') &&
                         result.event.name === 'authentication' && result.event.error === null) {
                         this.set('publicKey', result.event.value.publicKey);
@@ -75,6 +73,8 @@ BaseAuthForm.prototype = window.$.extend({},
                     } else {
                         this.set('errored', true);
                     }
+
+                    this.set('waitAuth', false);
                 })
         }
     }

@@ -50,8 +50,14 @@ BaseAuthForm.prototype = window.$.extend({},
                 attr === 'authenticated' ||
                 attr === 'waitAuth'
             ) {
+                console.log('waitAuth', this.model.waitAuth);
+                console.log('this.model.authenticated ', this.model.authenticated);
+                console.log('this.model.token ', this.model.token !== null);
+
                 if (this.model.waitAuth) {
                     this.$loginProcess.show();
+                    this.$signin.hide();
+                    this.$signup.hide();
                     return
                 }
 
@@ -59,11 +65,15 @@ BaseAuthForm.prototype = window.$.extend({},
                 this._rerender();
                 this._setup();
 
-
                 this.$loginProcess.hide();
                 this.$init.hide();
 
-                if (this.model.authenticated) {
+                if (!this.model.authenticated && (this.model.token || this.model.publicKey)) {
+                    this.$signin.hide();
+                    this.$signup.hide();
+                    this.$logout.hide();
+
+                } else if (this.model.authenticated && (this.model.token || this.model.publicKey)) {
                     this.$signin.hide();
                     this.$signup.hide();
                     this.$logout.show();
