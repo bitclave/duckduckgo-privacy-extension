@@ -128,7 +128,7 @@ let handleUIMessage = (req, res) => {
             event: {name: 'authentication', value: null, error: null}
         }
 
-        baseClient.authenticationByPassPhrase(req.event.value)
+        baseClient.authenticationByAccessToken(req.event.value)
             .then(account => {
                 respData.event.value = account;
                 res(respData)

@@ -1,12 +1,14 @@
-import Base, {InternalManagerModule} from "@bitclave/base-client-js";
+import Base, {ManagersModuleFactory, TokenType} from "@bitclave/base-client-js";
 
 class BaseClient {
 
-    authenticationByPassPhrase(mnemonic) {
-        const module = InternalManagerModule.Builder('https://base2-bitclva-com-eu.herokuapp.com', 'localhost').build();
+    authenticationByAccessToken(token) {
+        const module = ManagersModuleFactory.createRemoteManagers('https://base-client-js-remote.herokuapp.com');
         this.base = new Base(module);
-        return this.base.accountManager.authenticationByPassPhrase(mnemonic, 'some secret message')
-            .then(account => Promise.resolve(account));
+
+        return this.base.accountManager
+            .authenticationByAccessToken(token, TokenType.KEYCLOACK_JWT, 'some secret message')
+            .catch((e) => Promise.resolve(e));
     }
 
     getPublicKey() {

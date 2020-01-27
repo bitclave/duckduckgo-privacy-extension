@@ -1,4 +1,4 @@
-const bel = require('bel')
+const bel = require('bel');
 
 module.exports = function () {
     if (this.model.errored) {
@@ -9,16 +9,19 @@ module.exports = function () {
         return successAuthenticated.bind(this)()
     }
 
-
     return bel`<div>
-            <label class='frm__label'>Please enter you mnemonic phrase of Bitclave Base service</label>
-            <input class='frm__input js-baseauth-mnemonic' placeholder='mnemonic phrase'/>
-            <div class="btn js-baseauth-authenticate">Authenticate</div>
+            <label class='frm__label'>Login via Bitclave Base service</label>
+            <label class='frm__label js-baseauth-init'>Please wait while Bitclave Base initialize...</label>
+            <label class='frm__label js-baseauth-loginProcess'>Please wait while Bitclave Based authenticate...</label>
+            <div class="btn js-baseauth-signin">Sign In</div>
+            <div class="btn js-baseauth-signup">Sign Up</div>
+            <div class="btn js-baseauth-logout">Logout</div>
         </div>`
 }
 
 function successAuthenticated() {
-    return bel`<div><p>Success authenticated in Bitclave Base service.</p>
+    return bel`<div>
+                    <p>Success authenticated in Bitclave Base service.</p>
                     <p>Your public key is: ${this.model.publicKey}</p>
                     <div class="btn js-baseauth-logout">Logout</div>
                 </div>`

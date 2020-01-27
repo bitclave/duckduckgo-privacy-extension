@@ -1,14 +1,15 @@
-const Parent = window.DDG.base.View
-const baseAuthFormTemplate = require('../templates/baseauth-form.es6')
+const Parent = window.DDG.base.View;
+const baseAuthFormTemplate = require('../templates/baseauth-form.es6');
+const BaseAuth = require('../base/base-auth.es6');
 
 function BaseAuthForm(ops) {
-    this.model = ops.model
-    this.template = baseAuthFormTemplate
+    this.model = ops.model;
+    this.template = baseAuthFormTemplate;
 
-    Parent.call(this, ops)
+    Parent.call(this, ops);
 
-    this._setup()
-    this.model.checkAuthorization();
+    BaseAuth.insertLoginButton('#login');
+    this._setup();
 }
 
 BaseAuthForm.prototype = window.$.extend({},
@@ -16,17 +17,29 @@ BaseAuthForm.prototype = window.$.extend({},
     {
         _setup: function () {
             this._cacheElems('.js-baseauth', [
-                'mnemonic',
-                'authenticate',
+                'signin',
+                'signup',
                 'logout',
-            ])
+                'loginMessage',
+                'init',
+                'loginProcess'
+            ]);
 
             this.bindEvents([
                 [this.store.subscribe, `change:baseauthForm`, this._onModelChange],
-                [this.$mnemonic, `input`, this._onMnemonicChange],
-                [this.$authenticate, `click`, this._onAuthenticateClick],
-                [this.$logout, `click`, this._onLogoutClick]
-            ])
+                [this.$signin, 'click', this._onSignInClick],
+                [this.$signup, 'click', this._onSignUpClick],
+                [this.$logout, 'click', this._onLogoutClick],
+            ]);
+
+            this.$loginProcess.hide();
+            this.$loginMessage.hide();
+            this.$signin.hide();
+            this.$signup.hide();
+            this.$logout.hide();
+
+            this.model.listen();
+            BaseAuth.listenForInit(() => this.model.checkAuthorization());
         },
 
         _onModelChange: function (e) {
@@ -34,33 +47,55 @@ BaseAuthForm.prototype = window.$.extend({},
             const val = e.change.value;
 
             if (attr === 'errored' && val !== null ||
-                attr === 'publicKey'
+                attr === 'authenticated' ||
+                attr === 'waitAuth'
             ) {
-                this.unbindEvents()
-                this._rerender()
-                this._setup()
+                if (this.model.waitAuth) {
+                    this.$loginProcess.show();
+                    return
+                }
+
+                this.unbindEvents();
+                this._rerender();
+                this._setup();
+
+
+                this.$loginProcess.hide();
+                this.$init.hide();
+
+                if (this.model.authenticated) {
+                    this.$signin.hide();
+                    this.$signup.hide();
+                    this.$logout.show();
+                    this.$loginMessage.show();
+
+                } else {
+                    this.$signin.show();
+                    this.$signup.show();
+                    this.$logout.hide();
+                    this.$loginMessage.hide();
+                }
             }
         },
 
-        _onMnemonicChange: function () {
-            this.model.set('mnemonic', this.$mnemonic.val())
+        _onSignInClick: function (e) {
+            e.preventDefault();
+
+            this.model.signIn();
+        },
+
+        _onSignUpClick: function (e) {
+            e.preventDefault();
+
+            this.model.signUp();
         },
 
         _onLogoutClick: function (e) {
-            e.preventDefault()
+            e.preventDefault();
 
             this.model.logout();
         },
-
-        _onAuthenticateClick: function (e) {
-            e.preventDefault()
-
-            this.model.authenticate()
-
-            this.$authenticate.addClass('is-disabled')
-            this.$authenticate.text('Authentication...')
-        }
     }
-)
+);
 
-module.exports = BaseAuthForm
+module.exports = BaseAuthForm;

@@ -1,11 +1,14 @@
-const Parent = window.DDG.base.Model
+const Parent = window.DDG.base.Model;
+const BaseAuth = require('../base/base-auth.es6');
 
 function BaseAuthForm(attrs) {
-    attrs = attrs || {}
-    attrs.mnemonic = attrs.mnemonic || ''
-    attrs.authenticated = false
+    attrs = attrs || {};
+    attrs.authenticated = false;
+    attrs.token = null;
+    attrs.publicKey = null;
+    attrs.waitAuth = false;
 
-    Parent.call(this, attrs)
+    Parent.call(this, attrs);
 }
 
 BaseAuthForm.prototype = window.$.extend({},
@@ -13,13 +16,32 @@ BaseAuthForm.prototype = window.$.extend({},
     {
         modelName: 'baseauthForm',
 
+        listen: function () {
+            BaseAuth.listenForLogin((account) => {
+                if (!this.waitAuth) {
+                    this._authenticate(account.token);
+                }
+            });
+        },
+
+        signIn: function () {
+            BaseAuth.openSignInProgrammatically()
+        },
+
+        signUp: function () {
+            BaseAuth.openSignUpProgrammatically()
+        },
+
         logout: function () {
+            BaseAuth.logout();
+            this.fetch({updateSetting: {name: 'base-token', value: null}});
             this.fetch({event: {name: 'logout'}})
                 .then((result) => {
                     if (result && result.hasOwnProperty('event') &&
                         result.event.name === 'logout' && result.event.error === null) {
                         this.set('authenticated', false);
-                        this.set('publicKey', null)
+                        this.set('token', null);
+                        this.set('publicKey', null);
 
                     } else {
                         this.set('errored', true);
@@ -28,34 +50,27 @@ BaseAuthForm.prototype = window.$.extend({},
         },
 
         checkAuthorization: function () {
-            this.fetch({event: {name: 'getPublicKey'}})
-                .then((result) => {
-                    if (result && result.hasOwnProperty('event') &&
-                        result.event.name === 'getPublicKey' && result.event.error === null) {
-                        if (result.event.value) {
-                            this.set('authenticated', true);
-                            this.set('publicKey', result.event.value)
-
-                        } else {
-                            this.set('authenticated', false);
-                            this.set('publicKey', null)
-                        }
-
-                    } else {
-                        this.set('errored', true);
-                    }
+            this.fetch({getSetting: {name: 'base-token'}})
+                .then((result) => this.set('token', result))
+                .then(() => this.fetch({event: {name: 'getPublicKey'}}))
+                .then(result => {
+                    this.set('publicKey', result.event.value);
+                    this.set('authenticated', this.token !== null && this.publicKey !== null);
                 })
         },
 
-        authenticate: function () {
+        _authenticate: function (token) {
+            this.set('waitAuth', true);
+            this.fetch({updateSetting: {name: 'base-token', value: token}});
 
-            this.fetch({event: {name: 'authentication', value: this.mnemonic}})
+            this.fetch({event: {name: 'authentication', value: token}})
                 .then((result) => {
+                    this.set('waitAuth', false);
 
                     if (result && result.hasOwnProperty('event') &&
                         result.event.name === 'authentication' && result.event.error === null) {
+                        this.set('publicKey', result.event.value.publicKey);
                         this.set('authenticated', true);
-                        this.set('publicKey', result.event.value.publicKey)
 
                     } else {
                         this.set('errored', true);
@@ -63,6 +78,6 @@ BaseAuthForm.prototype = window.$.extend({},
                 })
         }
     }
-)
+);
 
-module.exports = BaseAuthForm
+module.exports = BaseAuthForm;

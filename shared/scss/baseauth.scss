@@ -2,3 +2,7 @@
 @import "mixins";
 
 @import "views/extension-page";
+
+.js-baseauth-widget {
+  display: none;
+}
