@@ -50,10 +50,6 @@ BaseAuthForm.prototype = window.$.extend({},
                 attr === 'authenticated' ||
                 attr === 'waitAuth'
             ) {
-                console.log('waitAuth', this.model.waitAuth);
-                console.log('this.model.authenticated ', this.model.authenticated);
-                console.log('this.model.token ', this.model.token !== null);
-
                 if (this.model.waitAuth) {
                     this.$loginProcess.show();
                     this.$signin.hide();
