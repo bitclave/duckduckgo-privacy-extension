@@ -120,38 +120,33 @@ const baseClient = require('./base-client.es6')
 chrome.runtime.onMessage.addListener((req, sender, res) => {
     if (sender.id !== chrome.runtime.id) return
 
+    if (req && req.hasOwnProperty('event') && req.event.name === 'search') {
+
+        baseClient.searchByQuery(req.event.value)
+            .then(result => res({
+                event: {
+                    name: 'search',
+                    value: result instanceof Error ? null : result,
+                    error: result instanceof Error ? result.message : null
+                }
+            }));
+
+        return true
+    }
+
     if (req && req.hasOwnProperty('event') && req.event.name === 'logout') {
-        baseClient.logout()
-
-        const respData = {
-            event: {name: 'logout', value: null, error: null}
-        }
-
-        res(respData)
+        baseClient.logout();
+        res({event: {name: 'logout', value: null, error: null}})
     }
 
     if (req && req.hasOwnProperty('event') && req.event.name === 'getPublicKey') {
-        const respData = {
-            event: {name: 'getPublicKey', value: baseClient.getPublicKey(), error: null}
-        }
-
-        res(respData)
+        res({event: {name: 'getPublicKey', value: baseClient.getPublicKey(), error: null}})
     }
 
     if (req && req.hasOwnProperty('event') && req.event.name === 'authentication') {
-        const respData = {
-            event: {name: 'authentication', value: null, error: null}
-        }
-
         baseClient.authenticationByAccessToken(req.event.value)
-            .then(account => {
-                respData.event.value = account;
-                res(respData)
-            })
-            .catch(e => {
-                respData.event.error = e;
-                res(respData)
-            });
+            .then(account => res({event: {name: 'authentication', value: account, error: null}}))
+            .catch(e => res({event: {name: 'authentication', value: null, error: e}}));
 
         return true
     }
