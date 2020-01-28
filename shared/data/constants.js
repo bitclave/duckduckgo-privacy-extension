@@ -1,4 +1,7 @@
 module.exports = {
+    "baseRemoteClient": "https://base-client-js-remote.herokuapp.com",
+    "shepherd": "http://shepherd-staging.herokuapp.com/cabinet/search",
+    "baseQueryPageLimit": 4,
     "trackerListLoc": "data/tracker_lists",
     "blockLists": [
         "trackersWithParentCompany.json"
