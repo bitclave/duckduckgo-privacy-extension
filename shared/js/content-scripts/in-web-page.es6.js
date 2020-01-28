@@ -11,7 +11,6 @@ const onLoad = () => {
             .then(result => viewStrategy
                 .changeStrategy(adStrategy.getStrategyName())
                 .onClickListener((item) => {
-                    console.log('click on item', item, adStrategy.getQuery(document));
                     const win = window.open(`${Config.shepherd}?q=${adStrategy.getQuery(document)}`, '_blank');
                     win.focus();
                 })

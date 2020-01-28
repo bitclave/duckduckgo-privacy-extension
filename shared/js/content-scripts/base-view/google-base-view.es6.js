@@ -37,7 +37,6 @@ class GoogleBaseView {
         `;
 
         element.addEventListener('click', () => this._onClickListener(item).bind(this), false);
-        console.log(element);
 
         return element;
     }
