@@ -8,6 +8,10 @@ class GoogleBaseView {
     }
 
     render(rootElement, page) {
+        if (page.content.length <= 0) {
+            return;
+        }
+
         const items = page.content.map(item => this._prepareItem(item.offer));
 
         const view = bel`
