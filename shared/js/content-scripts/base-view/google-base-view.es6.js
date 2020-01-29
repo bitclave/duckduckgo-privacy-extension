@@ -17,7 +17,8 @@ class GoogleBaseView {
         const view = bel`
             <div class="base-view__content">
                 ${items}
-                <div class="base-view__button__more">>></div>
+                <div class="base-view__button__more ${page.content.length < page.size ? 'base-view__button__more_hide' : ''}">
+                </div>
             </div>
         `;
 

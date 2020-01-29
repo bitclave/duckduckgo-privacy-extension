@@ -8,7 +8,7 @@
   cursor: pointer;
   justify-content: left;
   height: 221px;
-  min-width: 120px;
+  width: 120px;
   z-index: 2;
   background-color: #fff;
   box-shadow: none;
@@ -83,6 +83,10 @@
   color: #fff;
   text-decoration: none;
   text-align: center;
+}
+
+.base-view__button__more_hide{
+  display: none !important;
 }
 
 .base-view__button__more {
