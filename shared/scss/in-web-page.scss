@@ -1,15 +1,14 @@
 .base-view__content {
   display: flex;
-  margin-left: 158px;
-  width: 632px;
-  overflow: hidden;
+  margin-left: 150px;
+  width: 650px;
 }
 
 .base-view__item {
   cursor: pointer;
   justify-content: left;
   height: 221px;
-  min-width: 150px;
+  min-width: 120px;
   z-index: 2;
   background-color: #fff;
   box-shadow: none;
@@ -66,7 +65,7 @@
 
 .base-view__item__button {
   display: block;
-  max-width: 116px;
+  max-width: 88px;
   width: 100%;
   height: 8px;
   line-height: 8px;
@@ -80,8 +79,46 @@
   font-family: Roboto, sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   color: #fff;
   text-decoration: none;
   text-align: center;
+}
+
+.base-view__button__more {
+  position: relative;
+  right: 0;
+  min-width: 50px;
+  left: -32px;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  margin-top: auto;
+  margin-bottom: auto;
+  cursor: pointer;
+  background-color: #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 4px 8px 0 rgba(0,0,0,0.20);
+
+  &:after {
+    content: "";
+    background-image: url("data:image/svg+xml;charset=utf-8,<svg height='426pt' viewBox='0 -32 426.66667 426' width='426pt' xmlns='http://www.w3.org/2000/svg'><path d='m213.332031 181.667969c0 4.265625-1.277343 8.53125-3.625 11.730469l-106.667969 160c-3.839843 5.761718-10.238281 9.601562-17.707031 9.601562h-64c-11.730469 0-21.332031-9.601562-21.332031-21.332031 0-4.269531 1.28125-8.535157 3.625-11.734375l98.773438-148.265625-98.773438-148.269531c-2.34375-3.199219-3.625-7.464844-3.625-11.730469 0-11.734375 9.601562-21.335938 21.332031-21.335938h64c7.46875 0 13.867188 3.839844 17.707031 9.601563l106.667969 160c2.347657 3.199218 3.625 7.464844 3.625 11.734375zm0 0'/><path d='m426.667969 181.667969c0 4.265625-1.28125 8.53125-3.628907 11.730469l-106.664062 160c-3.839844 5.761718-10.242188 9.601562-17.707031 9.601562h-64c-11.734375 0-21.335938-9.601562-21.335938-21.332031 0-4.269531 1.28125-8.535157 3.628907-11.734375l98.773437-148.265625-98.773437-148.269531c-2.347657-3.199219-3.628907-7.464844-3.628907-11.730469 0-11.734375 9.601563-21.335938 21.335938-21.335938h64c7.464843 0 13.867187 3.839844 17.707031 9.601563l106.664062 160c2.347657 3.199218 3.628907 7.464844 3.628907 11.734375zm0 0'/></svg>");
+    z-index: -1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    background-position: 16px 16px;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+  }
+
+  &:hover {
+    box-shadow:0 2px 10px rgba(0,0,0,0.15)
+  }
 }

@@ -13,8 +13,13 @@ class GoogleBaseView {
         const view = bel`
             <div class="base-view__content">
                 ${items}
+                <div class="base-view__button__more">>></div>
             </div>
         `;
+
+        view.querySelector('.base-view__button__more')
+            .addEventListener('click', () => this._onClickListener().bind(this), false);
+
         rootElement.before(view);
     }
 
