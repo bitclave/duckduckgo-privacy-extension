@@ -13,7 +13,7 @@ const majorTrackingNetworks = Object.keys(trackerPrevalence)
     // lowercase them cause we only use them for comparing
     .map(t => t.toLowerCase())
 
-function Site (attrs) {
+function Site(attrs) {
     attrs = attrs || {}
     attrs.disabled = true // disabled by default
     attrs.tab = null
@@ -29,6 +29,12 @@ function Site (attrs) {
     attrs.trackerNetworks = []
     attrs.tosdr = {}
     attrs.isaMajorTrackingNetwork = false
+    attrs.firstName = "FirstName"
+    attrs.lastName = "LastName"
+    attrs.avatar = null;
+    attrs.email = "email@email.com"
+    attrs.hasBaseClientInfo = false
+
     Parent.call(this, attrs)
 
     this.bindEvents([
@@ -61,6 +67,23 @@ Site.prototype = window.$.extend({},
                     resolve()
                 })
             })
+        },
+
+        fetchBaseClientProfile: function () {
+            this.fetch({event: {name: 'profile'}}).then(result => {
+                if (result.hasOwnProperty('event') && !result.event.error) {
+                    const profile = result.event.value;
+
+                    this.set('firstName', profile.firstName)
+                    this.set('lastName', profile.lastName)
+                    this.set('avatar', profile.avatar)
+                    this.set('email', profile.email)
+                    this.set('hasBaseClientInfo', true)
+
+                } else {
+                    this.set('hasBaseClientInfo', false)
+                }
+            });
         },
 
         fetchSiteRating: function () {
@@ -122,9 +145,9 @@ Site.prototype = window.$.extend({},
             if (this.tab) {
                 // got siteRating back from background process
                 if (ops &&
-                        ops.siteRating &&
-                        ops.siteRating.site &&
-                        ops.siteRating.enhanced) {
+                    ops.siteRating &&
+                    ops.siteRating.site &&
+                    ops.siteRating.enhanced) {
                     let before = ops.siteRating.site.grade
                     let after = ops.siteRating.enhanced.grade
 
@@ -163,7 +186,7 @@ Site.prototype = window.$.extend({},
 
                 const newTrackerNetworks = this.getTrackerNetworksOnPage()
                 if (this.trackerNetworks.length === 0 ||
-                        (newTrackerNetworks.length !== this.trackerNetworks.length)) {
+                    (newTrackerNetworks.length !== this.trackerNetworks.length)) {
                     this.set('trackerNetworks', newTrackerNetworks)
                 }
 
@@ -248,14 +271,15 @@ Site.prototype = window.$.extend({},
                 this.isWhitelisted = !this.isWhitelisted
                 this.set('whitelisted', this.isWhitelisted)
                 const whitelistOnOrOff = this.isWhitelisted ? 'off' : 'on'
-                this.fetch({ firePixel: ['ept', whitelistOnOrOff] })
+                this.fetch({firePixel: ['ept', whitelistOnOrOff]})
 
-                this.fetch({'whitelisted':
-                    {
-                        list: 'whitelisted',
-                        domain: this.tab.site.domain,
-                        value: this.isWhitelisted
-                    }
+                this.fetch({
+                    'whitelisted':
+                        {
+                            list: 'whitelisted',
+                            domain: this.tab.site.domain,
+                            value: this.isWhitelisted
+                        }
                 })
             }
         }

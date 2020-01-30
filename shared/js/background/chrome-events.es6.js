@@ -120,8 +120,20 @@ const baseClient = require('./base-client.es6')
 chrome.runtime.onMessage.addListener((req, sender, res) => {
     if (sender.id !== chrome.runtime.id) return
 
-    if (req && req.hasOwnProperty('event') && req.event.name === 'search') {
+    if (req && req.hasOwnProperty('event') && req.event.name === 'profile') {
+        baseClient.getProfile()
+            .then(result => res({
+                event: {
+                    name: 'profile',
+                    value: result instanceof Error ? null : result,
+                    error: result instanceof Error ? result.message : null
+                }
+            }));
 
+        return true
+    }
+
+    if (req && req.hasOwnProperty('event') && req.event.name === 'search') {
         baseClient.searchByQuery(req.event.value)
             .then(result => res({
                 event: {

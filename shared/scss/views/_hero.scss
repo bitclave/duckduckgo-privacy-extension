@@ -1,13 +1,24 @@
 .hero {
-    padding: 0 20px 15px 20px;
+    width: 100%;
+    padding: 0;
     text-align: center;
     position: relative;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero__icon {
     @include icon_display();
-    margin-top: 15px;
+    flex: 1;
+    margin-right: 30px;
+}
+
+.hero__info {
+    flex: 7;
+    margin-left: 10px;
+    max-width: 226px;
 }
 
 .hero__title {
@@ -16,7 +27,6 @@
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: 11px;
     text-align: center;
     width: 100%;
     max-width: 100%;
@@ -26,11 +36,10 @@
 }
 
 .hero__subtitle {
-    padding-top: 6px;
     @include uppercase_label();
-    height: 20px;
-    line-height: 21px;
+    margin-top: 5px;
     text-align: center;
+    font-size: 11px;
 }
 
 .hero__close {
@@ -41,6 +50,6 @@
 
 .hero__open {
     position: absolute;
-    right: 20px;
+    right: 10px;
     top: calc(50% - 12px);
 }

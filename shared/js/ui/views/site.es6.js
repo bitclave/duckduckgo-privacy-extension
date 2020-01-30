@@ -23,6 +23,7 @@ function Site (ops) {
             // render template for the first time here
             Parent.call(this, ops)
             this.model.fetch({ firePixel: 'ep' })
+            this.model.fetchBaseClientProfile();
             this._setup()
         } else {
             // the timeout helps buffer the re-render cycle during heavy
@@ -73,7 +74,11 @@ Site.prototype = window.$.extend({},
                 'show-page-trackers',
                 'manage-whitelist',
                 'report-broken',
-                'privacy-practices'
+                'privacy-practices',
+                'profile-content',
+                'profile-avatar',
+                'profile-full-name',
+                'profile-email'
             ])
 
             this.$gradescorecard = this.$('.js-hero-open')
@@ -95,15 +100,14 @@ Site.prototype = window.$.extend({},
                 if (!this.$body.hasClass('is-disabled')) {
                     console.log('$body.addClass() is-disabled')
                     this.$body.addClass('is-disabled')
-                    this._rerender()
-                    this._setup()
                 }
             } else {
                 this.$body.removeClass('is-disabled')
-                this.unbindEvents()
-                this._rerender()
-                this._setup()
             }
+
+            this.unbindEvents()
+            this._rerender()
+            this._setup()
         },
 
         _onManageWhitelistClick: function () {

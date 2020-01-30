@@ -18,7 +18,7 @@ module.exports = function (site, ops) {
         site.isWhitelisted
     )
 
-    return bel`<div class="rating-hero-container js-rating-hero">
+    return bel`<div class="rating-hero-container js-rating-hero silver-bg">
      ${hero({
         status: status,
         title: site.domain,

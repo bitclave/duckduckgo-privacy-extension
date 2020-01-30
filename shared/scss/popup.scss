@@ -188,8 +188,16 @@ body {
             }
         }
 
+        .site-info__profile-li {
+            background-color: $color--silver;
+            padding: 0;
+            border-bottom: 1px solid gray;
+            border-bottom-style: dotted;
+        }
+
         .site-info__rating-li {
-            padding-top: 8px;
+            padding-top: 0;
+            background-color: $color--silver;
         }
 
         .site-info__li--https-status {
@@ -591,6 +599,7 @@ body {
 
 @import "views/search-form";
 @import "views/hero";
+@import "views/base-profile-simple";
 @import "views/hero-rating-container";
 @import "views/status-list";
 @import "views/privacy-practices";

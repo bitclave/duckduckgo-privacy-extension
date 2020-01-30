@@ -105,6 +105,28 @@ let getActiveTab = () => {
 }
 
 let handleUIMessage = (req, res) => {
+    if (req && req.hasOwnProperty('event') && req.event.name === 'profile') {
+        baseClient.getProfile()
+            .then(result => res({
+                event: {
+                    name: 'profile',
+                    value: result instanceof Error ? null : result,
+                    error: result instanceof Error ? result.message : null
+                }
+            }));
+    }
+
+    if (req && req.hasOwnProperty('event') && req.event.name === 'search') {
+        baseClient.searchByQuery(req.event.value)
+            .then(result => res({
+                event: {
+                    name: 'search',
+                    value: result instanceof Error ? null : result,
+                    error: result instanceof Error ? result.message : null
+                }
+            }));
+    }
+
     if (req && req.hasOwnProperty('event') && req.event.name === 'logout') {
         baseClient.logout()
 

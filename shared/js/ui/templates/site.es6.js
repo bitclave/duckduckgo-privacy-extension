@@ -1,4 +1,5 @@
 const bel = require('bel')
+const baseProfile = require('./shared/base-profile-simple')
 const toggleButton = require('./shared/toggle-button.es6.js')
 const ratingHero = require('./shared/rating-hero.es6.js')
 const trackerNetworksIcon = require('./shared/tracker-network-icon.es6.js')
@@ -11,10 +12,11 @@ module.exports = function () {
 
     return bel`<section class="site-info site-info--main">
     <ul class="default-list">
+        <li class="site-info__profile-li">
+            ${baseProfile(this.model)}
+        </li>
         <li class="site-info__rating-li js-hero-open">
-            ${ratingHero(this.model, {
-        showOpen: !this.model.disabled
-    })}
+            ${ratingHero(this.model, {showOpen: !this.model.disabled})}
         </li>
         <li class="site-info__li--https-status padded border--bottom">
             <h2 class="site-info__https-status bold">
