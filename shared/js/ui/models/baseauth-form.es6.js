@@ -25,11 +25,19 @@ BaseAuthForm.prototype = window.$.extend({},
         },
 
         signIn: function () {
-            BaseAuth.openSignInProgrammatically()
+            if (window.navigator.appName.toLowerCase() === 'netscape') {
+                this._mozillaAuthWebFlow('auth')
+            } else {
+                BaseAuth.openSignInProgrammatically()
+            }
         },
 
         signUp: function () {
-            BaseAuth.openSignUpProgrammatically()
+            if (window.navigator.appName.toLowerCase() === 'netscape') {
+                this._mozillaAuthWebFlow('registrations')
+            } else {
+                BaseAuth.openSignUpProgrammatically()
+            }
         },
 
         logout: function () {
@@ -57,6 +65,15 @@ BaseAuthForm.prototype = window.$.extend({},
                     this.set('publicKey', result.event.value);
                     this.set('authenticated', this.token !== null && this.publicKey !== null);
                 })
+        },
+
+        _mozillaAuthWebFlow: function (type) {// 'registrations' | 'auth'
+            BaseAuth.getAuthUrl(type)
+                .then(authUrl => window.browser.identity.launchWebAuthFlow({interactive: true, url: authUrl}))
+                .then(authResult => Promise.resolve(new URLSearchParams(authResult).get('access_token')))
+                .then(token => BaseAuth.authByToken(token))
+                .then(result => this._authenticate(result))
+                .catch(e => console.error(e));
         },
 
         _authenticate: function (token) {
